@@ -1,3 +1,4 @@
+# %%
 """
 This module is an example of a barebones QWidget plugin for napari
 
@@ -13,10 +14,11 @@ from os import path
 from typing import TYPE_CHECKING
 
 from magicgui import magic_factory
+from magicgui.widgets import FunctionGui
 from napari.utils.notifications import show_error
 from skimage.io import imread
 
-from ._trainer import CellposeTrainer
+from napari_segmentation_human_in_loop._trainer import CellposeTrainer
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -60,7 +62,20 @@ def _load_images_and_label_paths(folder):
     return image_with_label_paths, image_without_label_paths, new_label_paths
 
 
+def widget_init(widget: FunctionGui):
+    @widget.input_folder.changed.connect
+    def load_random_image(value):
+        logger.debug("load random image started")
+        logger.debug(value)
+        (
+            image_with_label_paths,
+            image_without_label_paths,
+            label_paths,
+        ) = _load_images_and_label_paths(value)
+
+
 @magic_factory(
+    widget_init=widget_init,
     input_folder=dict(
         widget_type="FileEdit",
         mode="d",
@@ -94,3 +109,6 @@ def wizard_widget(
     if len(image_without_label_paths) > 0:
         new_image = image_without_label_paths[0]
         new_label = trainer.predict(new_image)
+
+
+# %%
