@@ -5,24 +5,13 @@ contributions:
     - id: napari-segmentation-human-in-loop.make_sample_data
       python_name: napari_segmentation_human_in_loop._sample_data:make_sample_data
       title: Load sample data from Napari Segmentation Human in Loop
-    - id: napari-segmentation-human-in-loop.make_qwidget
-      python_name: napari_segmentation_human_in_loop._widget:ExampleQWidget
-      title: Make example QWidget
-    - id: napari-segmentation-human-in-loop.make_magic_widget
-      python_name: napari_segmentation_human_in_loop._widget:example_magic_widget
-      title: Make example magic widget
-    - id: napari-segmentation-human-in-loop.make_func_widget
-      python_name: napari_segmentation_human_in_loop._widget:example_function_widget
-      title: Make example function widget
+    - id: napari-segmentation-human-in-loop.make_wizard_widget
+      python_name: napari_segmentation_human_in_loop._widget:wizard_widget
+      title: Make human-in-loop training widget
   sample_data:
     - command: napari-segmentation-human-in-loop.make_sample_data
       display_name: Napari Segmentation Human in Loop
       key: unique_id.1
   widgets:
-    - command: napari-segmentation-human-in-loop.make_qwidget
-      display_name: Example QWidget
-    - command: napari-segmentation-human-in-loop.make_magic_widget
-      display_name: Example Magic Widget
-    - command: napari-segmentation-human-in-loop.make_func_widget
-      autogenerate: true
-      display_name: Example Function Widget
+    - command: napari-segmentation-human-in-loop.make_wizard_widget
+      display_name: Human-in-loop training
