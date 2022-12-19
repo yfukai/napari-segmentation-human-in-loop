@@ -1,4 +1,3 @@
-# %%
 """
 This module is an example of a barebones QWidget plugin for napari
 
@@ -13,7 +12,7 @@ from enum import Enum
 from glob import glob
 from os import path
 from pathlib import Path
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, List, Optional
 
 import napari.types
 import numpy as np
@@ -47,9 +46,6 @@ def _check_input_folder(folder):
         return True
 
 
-# %%
-
-
 def _load_images_and_label_paths(folder):
     logger.debug("load images and labels started")
     image_paths = sum(
@@ -64,25 +60,23 @@ def _load_images_and_label_paths(folder):
         (f, lf) for f, lf in zip(image_paths, label_paths) if path.isfile(lf)
     ]
     image_with_label_paths, new_label_paths = (
-        zip(res) if len(res) > 0 else [],
-        [],
+        zip(*res) if len(res) > 0 else ([], [])
     )
     image_without_label_paths = [
         f for f, lf in zip(image_paths, label_paths) if not path.isfile(lf)
     ]
+    logger.debug(f"images with labels {image_with_label_paths}")
+    logger.debug(f"labels {new_label_paths}")
     logger.debug("load images and labels finished")
     return image_with_label_paths, image_without_label_paths, new_label_paths
-
-
-# %%
 
 
 @magic_factory(
     input_folder=dict(
         widget_type="FileEdit",
         mode="d",
-        label="custom model path: ",
-        tooltip="if model type is custom, specify file path to it here",
+        label="input directory: ",
+        tooltip="directory containing input images and segmentations",
     ),
     call_button="Save segmentation and train",
 )
@@ -90,14 +84,19 @@ def wizard_widget(
     viewer: napari.Viewer,
     input_folder: Path,
     model_name: str,
+    training: bool,
     trainer_cls: Trainers = Trainers.cellpose,
-) -> List[napari.types.LayerDataTuple]:
+) -> Optional[List[napari.types.LayerDataTuple]]:
     logger.debug("training called")
     if not _check_input_folder(input_folder):
         return
-    model_path = input_folder / "models" / model_name
-    os.makedirs(model_path.parent, exist_ok=True)
-    trainer = trainer_cls.value(model_path)
+    if model_name == "":
+        show_error("model_name must not be empty")
+        return
+
+    model_path = input_folder / "models"
+    os.makedirs(model_path, exist_ok=True)
+    trainer = trainer_cls.value(model_path, model_name)
 
     if (
         SELECTED_IMAGES_LAYER_NAME in viewer.layers
@@ -107,6 +106,7 @@ def wizard_widget(
         image_path = viewer.layers[SELECTED_IMAGES_LAYER_NAME].metadata[
             "filename"
         ]
+        logger.debug(image_path)
         label_data = viewer.layers[SELECTED_LABELS_LAYER_NAME].data
         np.save(image_path + ".label.npy", label_data)
 
@@ -118,10 +118,10 @@ def wizard_widget(
     ) = _load_images_and_label_paths(input_folder)
 
     train_images = [imread(f) for f in image_with_label_paths]
-    train_labels = [imread(f) for f in label_paths]
+    train_labels = [np.load(f) for f in label_paths]
 
     logger.debug("loading images")
-    if len(train_images) > 0:
+    if len(train_images) > 0 and training:
         trainer.train(train_images, train_labels)
 
     if len(image_without_label_paths) > 0:
@@ -130,7 +130,7 @@ def wizard_widget(
         show_info("All images were used for training.")
         new_image_path = image_with_label_paths[0]
     new_image = imread(new_image_path)
-    new_label = trainer.predict(new_image)
+    new_label = trainer.predict([new_image])[0]
 
     return [
         (
@@ -143,6 +143,3 @@ def wizard_widget(
         ),
         (new_label, {"name": SELECTED_LABELS_LAYER_NAME}, "labels"),
     ]
-
-
-# %%
