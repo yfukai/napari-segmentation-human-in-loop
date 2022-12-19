@@ -8,7 +8,12 @@ from napari_segmentation_human_in_loop._widget import (
 )
 
 
-@pytest.mark.parametrize("training", [False, True])
+@pytest.mark.parametrize(
+    "training",
+    [
+        False,
+    ],
+)
 def test_example_magic_widget(make_napari_viewer, datadir, training, capsys):
     viewer = make_napari_viewer()
     # this time, our widget will be a MagicFactory or FunctionGui instance
