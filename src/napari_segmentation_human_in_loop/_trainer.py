@@ -5,5 +5,5 @@ class CellposeTrainer:
     def train(self, images, labels) -> None:
         pass
 
-    def pred(self, images):
+    def predict(self, images):
         pass
