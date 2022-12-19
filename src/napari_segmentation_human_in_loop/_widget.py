@@ -1,10 +1,5 @@
 """
-This module is an example of a barebones QWidget plugin for napari
-
-It implements the Widget specification.
-see: https://napari.org/stable/plugins/guides.html?#widgets
-
-Replace code below according to your needs.
+Widget for human-in-loop training of segmentation models.
 """
 import logging
 import os
@@ -119,10 +114,12 @@ def wizard_widget(
 
     train_images = [imread(f) for f in image_with_label_paths]
     train_labels = [np.load(f) for f in label_paths]
+    logger.debug("loading images finished")
 
-    logger.debug("loading images")
     if len(train_images) > 0 and training:
+        logger.debug("training started")
         trainer.train(train_images, train_labels)
+        logger.debug("training finished")
 
     if len(image_without_label_paths) > 0:
         new_image_path = image_without_label_paths[0]
@@ -130,7 +127,9 @@ def wizard_widget(
         show_info("All images were used for training.")
         new_image_path = image_with_label_paths[0]
     new_image = imread(new_image_path)
+    logger.debug("prediction started")
     new_label = trainer.predict([new_image])[0]
+    logger.debug("prediction finished")
 
     return [
         (
