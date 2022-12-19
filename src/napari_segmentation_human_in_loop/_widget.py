@@ -24,8 +24,8 @@ if TYPE_CHECKING:
     pass
 
 IMAGES_EXT = [".tiff", ".png"]
-SELECTED_IMAGES_LAYER_NAME = "segmentation_hil_image"
-SELECTED_LABELS_LAYER_NAME = "segmentation_hil_labels"
+IMAGES_LAYER_NAME = "segmentation_hil_image"
+LABELS_LAYER_NAME = "segmentation_hil_labels"
 
 
 class Trainers(Enum):
@@ -94,15 +94,13 @@ def wizard_widget(
     trainer = trainer_cls.value(model_path, model_name)
 
     if (
-        SELECTED_IMAGES_LAYER_NAME in viewer.layers
-        and SELECTED_LABELS_LAYER_NAME in viewer.layers
+        IMAGES_LAYER_NAME in viewer.layers
+        and LABELS_LAYER_NAME in viewer.layers
     ):
         logger.debug("saving images")
-        image_path = viewer.layers[SELECTED_IMAGES_LAYER_NAME].metadata[
-            "filename"
-        ]
+        image_path = viewer.layers[IMAGES_LAYER_NAME].metadata["filename"]
         logger.debug(image_path)
-        label_data = viewer.layers[SELECTED_LABELS_LAYER_NAME].data
+        label_data = viewer.layers[LABELS_LAYER_NAME].data
         np.save(image_path + ".label.npy", label_data)
 
     logger.debug("loading images")
@@ -135,10 +133,10 @@ def wizard_widget(
         (
             new_image,
             {
-                "name": SELECTED_IMAGES_LAYER_NAME,
+                "name": IMAGES_LAYER_NAME,
                 "metadata": {"filename": new_image_path},
             },
             "image",
         ),
-        (new_label, {"name": SELECTED_LABELS_LAYER_NAME}, "labels"),
+        (new_label, {"name": LABELS_LAYER_NAME}, "labels"),
     ]
