@@ -9,7 +9,7 @@ from napari_segmentation_human_in_loop._widget import Trainers, wizard_widget
         False,
     ],
 )
-def test_example_magic_widget(make_napari_viewer, datadir, training, capsys):
+def test_example_magic_widget(make_napari_viewer, datadir, training):
     viewer = make_napari_viewer()
     # this time, our widget will be a MagicFactory or FunctionGui instance
 
