@@ -23,7 +23,7 @@ logger.setLevel(logging.DEBUG)
 if TYPE_CHECKING:
     pass
 
-IMAGES_EXT = [".tiff", ".png"]
+IMAGES_EXT = [".tiff", ".tif", ".png"]
 IMAGES_LAYER_NAME = "segmentation_hil_image"
 LABELS_LAYER_NAME = "segmentation_hil_labels"
 
