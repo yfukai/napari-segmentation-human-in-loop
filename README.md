@@ -69,4 +69,7 @@ If you encounter any problems, please [file an issue] along with a detailed desc
 # ToDos
 
 [v] added channel argument
-[ ] default split channels
+[v] default split channels
+[ ] pydantic-aware widgets (waiting for update in magicgui)
+[ ] conversion from other data
+[ ] 3D things

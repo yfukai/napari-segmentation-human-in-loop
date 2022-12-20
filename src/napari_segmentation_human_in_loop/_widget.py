@@ -131,14 +131,23 @@ def wizard_widget(
     logger.debug("prediction started")
     new_label = trainer.predict([new_image])[0]
     logger.debug("prediction finished")
+    image_props = {
+        "name": IMAGES_LAYER_NAME,
+        "metadata": {"filename": new_image_path},
+    }
+    if new_image.shape[-1] == 3:
+        image_props.update(
+            {
+                "channel_axis": -1,
+                "rgb": False,
+                "colormap": ["red", "green", "blue"],
+            }
+        )
 
     return [
         (
             new_image,
-            {
-                "name": IMAGES_LAYER_NAME,
-                "metadata": {"filename": new_image_path},
-            },
+            image_props,
             "image",
         ),
         (new_label, {"name": LABELS_LAYER_NAME}, "labels"),
