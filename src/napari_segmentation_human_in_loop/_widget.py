@@ -81,6 +81,8 @@ def wizard_widget(
     model_name: str,
     training: bool,
     trainer_cls: Trainers = Trainers.cellpose,
+    cyto_channel: int = 0,
+    nuclear_channel: int = 0,
 ) -> Optional[List[napari.types.LayerDataTuple]]:
     logger.debug("training called")
     if not _check_input_folder(input_folder):
@@ -92,6 +94,7 @@ def wizard_widget(
     model_path = input_folder / "models"
     os.makedirs(model_path, exist_ok=True)
     trainer = trainer_cls.value(model_path, model_name)
+    trainer.channels = (cyto_channel, nuclear_channel)
 
     if (
         IMAGES_LAYER_NAME in viewer.layers
