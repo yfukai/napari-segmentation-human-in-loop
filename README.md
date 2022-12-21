@@ -7,7 +7,7 @@
 [![codecov](https://codecov.io/gh/yfukai/napari-segmentation-human-in-loop/branch/main/graph/badge.svg)](https://codecov.io/gh/yfukai/napari-segmentation-human-in-loop)
 [![napari hub](https://img.shields.io/endpoint?url=https://api.napari-hub.org/shields/napari-segmentation-human-in-loop)](https://napari-hub.org/plugins/napari-segmentation-human-in-loop)
 
-Some another napari plugin for human-in-loop training of segmentation models.
+Another napari plugin for human-in-loop training of segmentation models.
 
 ----------------------------------
 
