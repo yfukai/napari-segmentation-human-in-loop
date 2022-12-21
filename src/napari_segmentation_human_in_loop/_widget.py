@@ -3,6 +3,7 @@ Widget for human-in-loop training of segmentation models.
 """
 import logging
 import os
+import random
 from enum import Enum
 from glob import glob
 from os import path
@@ -80,6 +81,7 @@ def wizard_widget(
     input_folder: Path,
     model_name: str,
     training: bool,
+    shuffle: bool = True,
     trainer_cls: Trainers = Trainers.cellpose,
     cyto_channel: int = 0,
     nuclear_channel: int = 0,
@@ -123,10 +125,16 @@ def wizard_widget(
         logger.debug("training finished")
 
     if len(image_without_label_paths) > 0:
-        new_image_path = image_without_label_paths[0]
+        if shuffle:
+            new_image_path = random.choice(image_without_label_paths)
+        else:
+            new_image_path = image_without_label_paths[0]
     else:
         show_info("All images were used for training.")
-        new_image_path = image_with_label_paths[0]
+        if shuffle:
+            new_image_path = random.choice(image_with_label_paths)
+        else:
+            new_image_path = image_with_label_paths[0]
     new_image = imread(new_image_path)
     logger.debug("prediction started")
     new_label = trainer.predict([new_image])[0]
