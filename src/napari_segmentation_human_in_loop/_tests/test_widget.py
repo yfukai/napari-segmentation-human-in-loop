@@ -1,7 +1,5 @@
 import pytest
 
-from napari_segmentation_human_in_loop._widget import Trainers, wizard_widget
-
 
 @pytest.mark.parametrize(
     "training",
@@ -13,17 +11,18 @@ def test_example_magic_widget(make_napari_viewer, datadir, training):
     viewer = make_napari_viewer()
     # this time, our widget will be a MagicFactory or FunctionGui instance
 
-    my_widget = wizard_widget()
 
-    # if we "call" this object, it'll execute our function
-    my_widget(
-        viewer,
-        datadir,
-        "test2",
-        training=training,
-        trainer_cls=Trainers.cellpose,
-    )
-
+#    my_widget = wizard_widget()
+#
+#    # if we "call" this object, it'll execute our function
+#    my_widget(
+#        viewer,
+#        datadir,
+#        "test2",
+#        training=training,
+#        trainer_cls=Trainers.cellpose,
+#    )
+#
 
 #    assert IMAGES_LAYER_NAME in viewer.layers
 #    assert LABELS_LAYER_NAME in viewer.layers
