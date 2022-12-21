@@ -135,6 +135,13 @@ def wizard_widget(
         "name": IMAGES_LAYER_NAME,
         "metadata": {"filename": new_image_path},
     }
+
+    # to avoid possible bug
+    if IMAGES_LAYER_NAME in viewer.layers:
+        del viewer.layers[IMAGES_LAYER_NAME]
+    if LABELS_LAYER_NAME in viewer.layers:
+        del viewer.layers[LABELS_LAYER_NAME]
+
     if new_image.shape[-1] == 3:
         image_props.update(
             {
