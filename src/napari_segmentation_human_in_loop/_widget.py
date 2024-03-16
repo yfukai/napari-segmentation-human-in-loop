@@ -8,7 +8,7 @@ from enum import Enum
 from glob import glob
 from os import path
 from pathlib import Path
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING, List
 
 import napari.types
 import numpy as np
@@ -85,13 +85,13 @@ def wizard_widget(
     trainer_cls: Trainers = Trainers.cellpose,
     cyto_channel: int = 0,
     nuclear_channel: int = 0,
-) -> Optional[List[napari.types.LayerDataTuple]]:
+) -> List[napari.types.LayerDataTuple]:
     logger.debug("training called")
     if not _check_input_folder(input_folder):
-        return
+        return []
     if model_name == "":
         show_error("model_name must not be empty")
-        return
+        return []
 
     model_path = input_folder / "models"
     os.makedirs(model_path, exist_ok=True)

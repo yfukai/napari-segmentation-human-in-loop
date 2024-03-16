@@ -2,16 +2,9 @@ name: napari-segmentation-human-in-loop
 display_name: Napari Segmentation Human in Loop
 contributions:
   commands:
-    - id: napari-segmentation-human-in-loop.make_sample_data
-      python_name: napari_segmentation_human_in_loop._sample_data:make_sample_data
-      title: Load sample data from Napari Segmentation Human in Loop
     - id: napari-segmentation-human-in-loop.make_wizard_widget
       python_name: napari_segmentation_human_in_loop._widget:wizard_widget
       title: Make human-in-loop training widget
-  sample_data:
-    - command: napari-segmentation-human-in-loop.make_sample_data
-      display_name: Napari Segmentation Human in Loop
-      key: unique_id.1
   widgets:
     - command: napari-segmentation-human-in-loop.make_wizard_widget
       display_name: Human-in-loop training
