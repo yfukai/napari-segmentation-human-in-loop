@@ -22,6 +22,7 @@ class CellposeTrainer:
             if model_exists
             else False,
             model_type="cyto" if not model_exists else None,
+            diam_mean=0,
         )
 
     def train(self, images, labels) -> None:
@@ -32,6 +33,8 @@ class CellposeTrainer:
             channels=self.channels,
             save_path=str(self.model_path.parent),
             model_name=self.model_name,
+            rescale=False,
+            learning_rate=0.2,
         )
 
     def predict(self, images) -> LabelsData:
