@@ -36,4 +36,4 @@ class CellposeTrainer:
 
     def predict(self, images) -> LabelsData:
         model = self._get_model()
-        return model.eval(images, channels=self.channels)
+        return model.eval(images, channels=self.channels, rescale=1.0)
